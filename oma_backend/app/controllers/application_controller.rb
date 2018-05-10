@@ -4,15 +4,6 @@ class ApplicationController < ActionController::API
 	def access_token_exsit?
 		params[:access_token] && !params[:access_token].empty? ? true : false
 	end
-	
-	def set_user
-		@user = User.find_by_token params[:access_token] 
-		if @user 
-			@user
-		else 
-			send_res error: true, msg: 'user not found' 
-		end
-	end
 
 	private
 	def send_res opt={}

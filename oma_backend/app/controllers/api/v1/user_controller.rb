@@ -4,6 +4,8 @@ class Api::V1::UserController < ApplicationController
 		user_info = {}
 		user_info['id'] = user.id
 		user_info['access_token'] = user.token
+		user_info['email'] = user.email
+		user_info['name'] = user.name
 		send_res data: user_info 
 	end
 end

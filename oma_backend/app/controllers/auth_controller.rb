@@ -1,7 +1,6 @@
 class AuthController < ApplicationController
 	before_action :set_user
 	
-	private
 	def set_user
 		@user = User.find_by_token params[:access_token] 
 		if @user 
