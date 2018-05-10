@@ -13,12 +13,13 @@ permalink: '/'
   <script src="https://apis.google.com/js/platform.js?v={{ site.data.app.version }}&onload=google_ready" async defer></script>
   <script src="/js/router.js?v={{ site.data.app.version }}"></script>
   <script src="/js/oma_api.js?v={{ site.data.app.version }}"></script>
+  <script src="/js/oma_scene.js?v={{ site.data.app.version }}"></script>
   <script src="/js/app.js?v={{ site.data.app.version }}"></script>
   <link type="text/css" href="/css/app.css?v={{ site.data.app.version }}" rel="stylesheet">
 </head>
 <body id='app'>
 	<header>
-		<h1>OMA<small>- TODO lists</small></h1>
+		<h1>OMA<small> - online TODO lists</small></h1>
 	</header>
   {% include views/loading.html %}
   {% include views/login.html %}
