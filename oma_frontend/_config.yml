@@ -1,0 +1,8 @@
+title: OMA_client
+baseurl: "" 
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - LICENSE
+  - .gitignore

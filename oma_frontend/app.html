@@ -1,0 +1,31 @@
+---
+layout: null
+permalink: '/'
+---
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="google-signin-scope" content="profile email">
+  <meta name="google-signin-client_id" content="1056914337357-noqaejishtr7d1ajgmot2rrabgns2u5m.apps.googleusercontent.com">
+  <!-- google yolo -->
+  <!-- <script src="https://smartlock.google.com/client"></script> -->
+  <!-- 需要signin button才要这个 -->
+  <script src="https://apis.google.com/js/platform.js?v={{ site.data.app.version }}&onload=google_ready" async defer></script>
+  <script src="/js/router.js?v={{ site.data.app.version }}"></script>
+  <script src="/js/oma_api.js?v={{ site.data.app.version }}"></script>
+  <script src="/js/app.js?v={{ site.data.app.version }}"></script>
+  <link type="text/css" href="/css/app.css?v={{ site.data.app.version }}" rel="stylesheet">
+</head>
+<body id='app'>
+	<header>
+		<h1>OMA<small>- TODO lists</small></h1>
+	</header>
+  {% include views/loading.html %}
+  {% include views/login.html %}
+
+	<footer>FOOTER</footer>
+</body>
+</html>
+
+
+<!-- https://www.googleapis.com/oauth2/v3/tokeninfo?id_token= -->
