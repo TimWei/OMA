@@ -1,5 +1,9 @@
 
 function OmaApi() {
+  this.user= {
+    name: '',
+    access_token: ''
+  }
   this.host = '//localhost'
   this.port = 4000
   this.api_prefix = '/api/v1'
@@ -7,8 +11,16 @@ function OmaApi() {
     'ping': '/server/ping',
     'signin': '/users/auth',
   }
-
 }
+
+OmaApi.prototype.set_user = function (user) {
+  this.user = user
+};
+
+OmaApi.prototype.user_invalid = function (user) {
+  return this.user['access_token'] == '' ? true : false
+};
+
 
 OmaApi.prototype.ping = function (opt) {
   this.get('ping',function(res){
@@ -16,8 +28,18 @@ OmaApi.prototype.ping = function (opt) {
   })
 };
 
-OmaApi.prototype.signin = function (auth_data) {
-  this.post('signin',auth_data,function(res){ console.log(res['data']) })
+OmaApi.prototype.signin = function (auth_data, callback) {
+  let that = this;
+  this.post('signin', auth_data, function(res){ 
+    console.log(res['data']) 
+    user_info = res['data'];
+    that.set_user({
+            name: user_info['name'],
+            email:  user_info['email'],
+            access_token: user_info['access_token'],
+        });
+    callback();
+  })
 };
 
 OmaApi.prototype.get = function(path, callback){
