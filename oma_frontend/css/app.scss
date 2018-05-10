@@ -21,6 +21,13 @@ h1 {
 		background-color: $app-bar;
 		border-radius: 20px 90px 0px 0px;
 		padding-right: 60px;
+		a {
+			display: inline-block;
+			height: 100%;
+			img {
+				height: 100%;
+			}
+		}
 		h1{
 			float: right;
 			margin: 10px;
