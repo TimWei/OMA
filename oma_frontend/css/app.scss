@@ -44,6 +44,7 @@ h1 {
 	    border: coral;
 	    border-width: 0px 2px 0px 0px;
 	    border-style: groove;
+	    min-height: 350px;
 		&.active{
 			display: block;
 		}
