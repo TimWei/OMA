@@ -1,8 +1,6 @@
-class Api::V1::ServerController < AuthController
+class Api::V1::ServerController < ApplicationController
 	def ping
-		res = {}
-		res['server'] = 'pong'
-
-		send_res data: res
+		@res[:data]['server'] = 'pong'
+		send_res  
 	end
 end

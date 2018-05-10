@@ -1,3 +1,5 @@
+# TIM: Oauth2 auth code have its expiration time, we should using a cache system here likes Redis or Memcache. prevent HTTP requests before it expired for improving performance.
+# 
 require 'certified'
 class Provider::Google
 	def initialize auth_code
