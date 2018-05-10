@@ -5,6 +5,8 @@
 $app-bg: #F0A6A2;
 $app-bar: #f2c38b;
 $app-view: #e7dfdd;
+$app-list: #E7DF96;
+$app-list-hover: #E7DF3D;
 $ya-hei: Microsoft JhengHei;
 
 body {
@@ -64,10 +66,41 @@ h1 {
 			font-weight: bold;
 			margin-bottom: 15px;
 		}
+		.g-signin2 {
+			display: inline;
+			.abcRioButton{
+				display: inline-block;
+			}
+		}
 	}
 	#loading {
 		h3 {
 			float: left;
+		}
+	}
+	#dashboard {
+		.lists {
+			li {
+				height: 75px;
+			    width: 25%;
+			    background-color: $app-list;
+			    margin-bottom: 20px;
+	    	    border-radius: 20px 75px 75px 75px;
+		        cursor: pointer;
+			    list-style-type: none;
+			    padding-left: 15px;
+			    padding-top: 15px;
+			    overflow: hidden;
+			    &:hover {
+			    	background-color: $app-list-hover;
+			    }
+			    &.new {
+					width: 10%;
+				    height: 45px;
+				    border-radius: 26px;
+				    background-color: beige
+			    }
+			}
 		}
 	}
 }
