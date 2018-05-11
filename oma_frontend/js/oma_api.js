@@ -7,11 +7,13 @@ function OmaApi(opt={}) {
   this.host = opt['host']
   this.port = opt['port']
   this.api_prefix = opt['api_prefix']
+  this.cable = ActionCable.createConsumer('ws://' + this.host + ':' + this.port + opt['cable'] );
   this.scheme = {
     'ping': '/server/ping',
     'signin': '/users/auth',
     'get_lists': '/todo_lists',
     'post_lists': '/todo_lists',
+    'get_list_items': '/todo_lists/:short_cut/item',
   }
 }
 
@@ -59,6 +61,10 @@ OmaApi.prototype.post_lists = function (list_name, callback) {
   })
 };
 
+OmaApi.prototype.connect = function(e){
+
+}
+
 OmaApi.prototype.get = function(path, callback){
   var xhr = new XMLHttpRequest();
   uri = this.api_uri(path) + '?access_token=' + this.user.access_token
@@ -91,9 +97,16 @@ OmaApi.prototype.post = function(path, data, callback){
   xhr.send(JSON.stringify(data));
 }
 
-OmaApi.prototype.api_uri = function(path){
-  return this.host + ':' + this.port + this.api_prefix + this.scheme[path]
+OmaApi.prototype.api_uri = function(path, opt={}){
+  path = this.scheme[path]
+  pattern = path.match('/:([a-zA-Z0-9]*)')
+  while(pattern){
+    path = path.replace(new RegExp('/:[a-zA-Z0-9]*'), '/' + opt[pattern[1]])
+    pattern = path.match('/:([a-zA-Z0-9]*)')
+  }
+  return this.host + ':' + this.port + this.api_prefix + path
 }
+
 
 ////// DOM controller
 OmaApi.prototype.toggle = function(id, display) {
