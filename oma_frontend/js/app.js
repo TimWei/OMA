@@ -73,7 +73,7 @@ window.onbeforeunload = function(e){
     }
 };
 function google_signin(googleUser){
-	var provider = 'google'
+    var provider = 'google'
     var profile = googleUser.getBasicProfile();
     var email = profile.getEmail();
     var id_token = googleUser.getAuthResponse().id_token;
