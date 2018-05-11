@@ -37,6 +37,17 @@ OmaApi.prototype.signin = function (auth_data, callback) {
 OmaApi.prototype.get_lists = function (callback) {
   this.get('get_lists', function(res){ 
     console.log(res['data']['lists']) 
+    lists_data = res['data']['lists'];
+    lists = document.getElementsByClassName('lists')[0];
+    Array.from(lists.children).forEach(function(e){
+      if(!e.classList.contains('new')){e.remove()}
+    })
+    lists_data.forEach(function(e){
+      ele = document.createElement('li');
+      ele.textContent = e.name;
+      ele.setAttribute('data-list',e.short_cut);
+      lists.prepend(ele);
+    })
     callback();
   })
 };
