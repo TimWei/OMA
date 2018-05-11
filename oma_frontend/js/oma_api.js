@@ -37,20 +37,11 @@ OmaApi.prototype.signin = function (auth_data, callback) {
 OmaApi.prototype.get_lists = function (callback) {
   that = this;
   this.get('get_lists', function(res){ 
+    that.set_greeting();
     console.log(res['data']['lists']) 
-
-    document.getElementById('user_name').textContent = that.user.name;
     lists_data = res['data']['lists'];
-    lists = document.getElementsByClassName('lists')[0];
-    Array.from(lists.children).forEach(function(e){
-      if(!e.classList.contains('new')){e.remove()}
-    })
-    lists_data.forEach(function(e){
-      ele = document.createElement('li');
-      ele.textContent = e.name;
-      ele.setAttribute('data-list',e.short_cut);
-      lists.prepend(ele);
-    })
+    that.clear_lists();
+    that.create_list(lists_data)
     callback();
   })
 };
@@ -91,6 +82,29 @@ OmaApi.prototype.api_uri = function(path){
   return this.host + ':' + this.port + this.api_prefix + this.scheme[path]
 }
 
+////// DOM controller
+
+OmaApi.prototype.set_greeting = function(){
+  document.getElementById('user_name').textContent = that.user.name;
+}
+
+OmaApi.prototype.clear_lists = function(){
+  lists = document.getElementsByClassName('lists')[0];
+  Array.from(lists.children).forEach(function(e){
+    if(!e.classList.contains('new')){e.remove()}
+  })
+}
+
+OmaApi.prototype.create_list = function(data){
+  lists = document.getElementsByClassName('lists')[0];
+  console.log(data);
+  data.forEach(function(data){
+    ele = document.createElement('li');
+    ele.textContent = data.name;
+    ele.setAttribute('data-list',data.short_cut);
+    lists.prepend(ele);
+  });
+}
 
 //////User Auth/Validations
 
