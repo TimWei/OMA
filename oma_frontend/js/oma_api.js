@@ -13,20 +13,18 @@ function OmaApi(opt={}) {
     'signin': '/users/auth',
     'get_lists': '/todo_lists',
     'post_lists': '/todo_lists',
-    'get_list_items': '/todo_lists/:short_cut/item',
+    'get_list_items': '/todo_lists/:short_cut/items',
   }
 }
 
 OmaApi.prototype.ping = function (opt) {
-  this.get('ping',function(res){
-    console.log(res['data'])
+  this.get('ping',{},function(res){
   })
 };
 
 OmaApi.prototype.signin = function (auth_data, callback) {
   let that = this;
   this.post('signin', auth_data, function(res){ 
-    console.log(res['data']) 
     user_info = res['data'];
     that.set_user({
             name: user_info['name'],
@@ -39,9 +37,8 @@ OmaApi.prototype.signin = function (auth_data, callback) {
 
 OmaApi.prototype.get_lists = function (callback) {
   that = this;
-  this.get('get_lists', function(res){ 
+  this.get('get_lists', {},function(res){ 
     that.set_greeting();
-    console.log(res['data']['lists']) 
     lists_data = res['data']['lists'];
     that.clear_lists();
     that.append_list(lists_data)
@@ -55,23 +52,27 @@ OmaApi.prototype.post_lists = function (list_name, callback) {
     access_token: this.user.access_token,
     list_name: list_name
   } , function(res){ 
-    console.log(res);
     that.append_list([res['data']]);
     callback();
   })
 };
 
-OmaApi.prototype.connect = function(e){
-
+OmaApi.prototype.get_list_items = function(short_cut, callback){
+  that = this;
+  this.get('get_list_items', {short_cut: short_cut},function(res){
+    console.log(res)
+    that.append_list_item();
+    callback();
+  })
 }
 
-OmaApi.prototype.get = function(path, callback){
+OmaApi.prototype.get = function(path, opt, callback){
   var xhr = new XMLHttpRequest();
-  uri = this.api_uri(path) + '?access_token=' + this.user.access_token
+  uri = this.api_uri(path, opt) + '?access_token=' + this.user.access_token
   xhr.open('GET', uri);
   xhr.onload = function() {
       res = JSON.parse(xhr.responseText)
-      if (xhr.status === 200 && res['data']['error'] != 1) {
+      if (xhr.status === 200 && res['error'] != 1) {
         callback(res);
       }
       else {
@@ -99,10 +100,10 @@ OmaApi.prototype.post = function(path, data, callback){
 
 OmaApi.prototype.api_uri = function(path, opt={}){
   path = this.scheme[path]
-  pattern = path.match('/:([a-zA-Z0-9]*)')
+  pattern = path.match('/:([a-zA-Z0-9_-]*)')
   while(pattern){
-    path = path.replace(new RegExp('/:[a-zA-Z0-9]*'), '/' + opt[pattern[1]])
-    pattern = path.match('/:([a-zA-Z0-9]*)')
+    path = path.replace(new RegExp('/:[a-zA-Z0-9_-]*'), '/' + opt[pattern[1]])
+    pattern = path.match('/:([a-zA-Z0-9_-]*)')
   }
   return this.host + ':' + this.port + this.api_prefix + path
 }
@@ -132,13 +133,16 @@ OmaApi.prototype.clear_lists = function(){
 
 OmaApi.prototype.append_list = function(data){
   lists = document.getElementsByClassName('lists')[0];
-  console.log(data);
   data.forEach(function(data){
     ele = document.createElement('li');
     ele.textContent = data.name;
     ele.setAttribute('data-list',data.short_cut);
+    ele.onclick = function(){window.location.href = '#list/' + data.short_cut}
     lists.prepend(ele);
   });
+}
+OmaApi.prototype.append_list_item = function(data){
+  console.log('TODO append list_item')
 }
 
 //////User Auth/Validations

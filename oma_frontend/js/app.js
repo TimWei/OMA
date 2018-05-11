@@ -28,6 +28,17 @@ window.app.router.route('dashboard',function(e){
     });
 })
 
+window.app.router.route('list/[a-zA-Z0-9_-]{24}',function(e){
+    window.app.oma.user_required(function(){
+        window.location.href = '/';
+    });
+    window.app.scene.active('loading');
+    window.app.oma.get_list_items(window.location.href.match('list/([a-zA-Z0-9_-]{24})')[1] ,function(){
+
+        window.app.scene.active('list');
+    });
+})
+
 window.app.router.route('invite/[a-zA-Z0-9]{24}',function(e){
     if(window.app.oma.user_invalid()){
         gapi.auth2.getAuthInstance().signIn().then(function(googleUser){ 
