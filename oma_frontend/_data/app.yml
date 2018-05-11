@@ -1,2 +1,4 @@
 name: 'Oma'
 version: '051001'
+oauth:
+  google: '1056914337357-noqaejishtr7d1ajgmot2rrabgns2u5m.apps.googleusercontent.com'
