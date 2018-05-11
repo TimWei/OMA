@@ -27,6 +27,17 @@ window.app.router.route('dashboard',function(e){
     });
 })
 
+window.app.router.route('invite/[a-zA-Z0-9]{24}',function(e){
+    if(window.app.oma.user_invalid()){
+        gapi.auth2.getAuthInstance().signIn().then(function(e){ 
+            window.app.oma.get_invited()
+        })
+    }else{
+        // TODO!
+        window.app.oma.get_invited()
+    }
+})
+
 
 // google auth callback
 window.onbeforeunload = function(e){
