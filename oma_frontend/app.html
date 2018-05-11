@@ -7,7 +7,10 @@ permalink: '/'
 <head>
   <link rel="icon" href="/favicon.ico?v={{ site.data.app.version }}">
   <meta name="google-signin-scope" content="profile email">
-  <meta name="google-signin-client_id" content="{{ site.data.app.oauth.google }}">
+  <meta name="google-signin-client_id" content="{{ site.data.app.oauth.google }}">  
+  <meta name="oma-host" content="{{ site.data.app.network.host }}">
+  <meta name="oma-port" content="{{ site.data.app.network.port }}">
+  <meta name="oma-prefix" content="{{ site.data.app.network.api_prefix }}">
   <!-- google yolo -->
   <!-- <script src="https://smartlock.google.com/client"></script> -->
   <!-- 需要signin button才要这个 -->

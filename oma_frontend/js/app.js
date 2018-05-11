@@ -2,7 +2,11 @@ window.app = {}
 window.app.constants = {
 	'auto_signout' : true
 }
-window.app.oma = new OmaApi();
+window.app.oma = new OmaApi({
+    host: document.getElementsByName('oma-host')[0].content,
+    port: document.getElementsByName('oma-port')[0].content,
+    api_prefix: document.getElementsByName('oma-prefix')[0].content
+});
 window.app.scene = new OmaScene();
 
 // routing

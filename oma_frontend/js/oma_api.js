@@ -1,12 +1,12 @@
 
-function OmaApi() {
+function OmaApi(opt={}) {
   this.user= {
     name: '',
     access_token: ''
   }
-  this.host = '//localhost'
-  this.port = 4000
-  this.api_prefix = '/api/v1'
+  this.host = opt['host']
+  this.port = opt['port']
+  this.api_prefix = opt['api_prefix']
   this.scheme = {
     'ping': '/server/ping',
     'signin': '/users/auth',
