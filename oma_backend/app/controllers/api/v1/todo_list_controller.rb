@@ -11,16 +11,7 @@ class Api::V1::TodoListController < AuthController
 		end
 		send_res 
 	end
-
-	def show
-		list = TodoList.where(short_cut: params[:short_cut] ).first 
-		@res[:data][:list] = {
-			name: list.name,
-			short_cut: list.short_cut,
-			items: list.items.map{|t| { id: t.id, content: t.content, finished: t.finished} }
-		}
-		send_res 
-	end
+	
 
 	def create
 		list = TodoList.new

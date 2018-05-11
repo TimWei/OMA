@@ -27,6 +27,6 @@ class Api::V1::TodoListItemController < AuthController
 
 	private
 	def set_list
-		@list = TodoList.where(short_cut: params[:short_cut] ).first 
+		@list = @user.lists.where(short_cut: params[:short_cut] ).first 
 	end
 end
