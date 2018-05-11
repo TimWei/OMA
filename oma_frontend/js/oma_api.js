@@ -104,7 +104,6 @@ OmaApi.prototype.toggle = function(id, display) {
   }else{
     ele.style.display = 'none';
   }
-//  window.app.oma.toggle('new_form_name')
 }
 
 OmaApi.prototype.set_greeting = function(){
@@ -130,7 +129,6 @@ OmaApi.prototype.append_list = function(data){
 }
 
 //////User Auth/Validations
-
 OmaApi.prototype.set_user = function (user) {
   this.user = user
 };
