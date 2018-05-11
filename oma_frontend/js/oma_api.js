@@ -10,6 +10,7 @@ function OmaApi() {
   this.scheme = {
     'ping': '/server/ping',
     'signin': '/users/auth',
+    'get_lists': '/todo_lists',
   }
 }
 
@@ -44,11 +45,12 @@ OmaApi.prototype.signin = function (auth_data, callback) {
 
 OmaApi.prototype.get = function(path, callback){
   var xhr = new XMLHttpRequest();
-  uri = this.api_uri(path)
+  uri = this.api_uri(path) + '?access_token=' + this.user.access_token
   xhr.open('GET', uri);
   xhr.onload = function() {
-      if (xhr.status === 200) {
-        callback(JSON.parse(xhr.responseText));
+      res = JSON.parse(xhr.responseText)
+      if (xhr.status === 200 && res['data']['error'] != 1) {
+        callback(res);
       }
       else {
         alert('XHR Failed: ' + xhr.status);

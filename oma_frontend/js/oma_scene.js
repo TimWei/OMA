@@ -1,6 +1,5 @@
 
 function OmaScene(opt={}) {
- 
 }
 
 OmaScene.prototype.active = function (scene_id) {

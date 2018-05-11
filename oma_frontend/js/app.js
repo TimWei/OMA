@@ -3,9 +3,7 @@ window.app.constants = {
 	'auto_signout' : true
 }
 window.app.oma = new OmaApi();
-window.app.scene = new OmaScene({
-    default: 'loading'
-});
+window.app.scene = new OmaScene();
 
 // routing
 window.app.router = new FrontRouter();
