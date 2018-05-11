@@ -14,6 +14,7 @@ function OmaApi(opt={}) {
     'get_lists': '/todo_lists',
     'post_lists': '/todo_lists',
     'get_list_items': '/todo_lists/:short_cut/items',
+    'invited' : '/todo_lists/invite'
   }
 }
 
@@ -62,6 +63,16 @@ OmaApi.prototype.get_list_items = function(short_cut, callback){
   this.get('get_list_items', {short_cut: short_cut},function(res){
     console.log(res)
     that.append_list_item();
+    callback();
+  })
+}
+
+OmaApi.prototype.invited = function(short_cut, callback){
+  that = this;
+  this.post('invited', {
+    short_cut: short_cut,
+    access_token: this.user.access_token,
+  },function(res){
     callback();
   })
 }
@@ -154,9 +165,11 @@ OmaApi.prototype.user_invalid = function (user) {
   return this.user['access_token'] == '' ? true : false
 };
 
-OmaApi.prototype.user_required = function (callback) {
-    if(this.user_invalid()){
-        callback();
-    }
+OmaApi.prototype.user_required = function (valid, invalid) {
+  if(this.user_invalid()){
+    invalid();
+  }else{
+    valid();
+  }
 };
 

@@ -20,29 +20,34 @@ window.app.router.route('/',function(e){
 
 window.app.router.route('dashboard',function(e){
     window.app.oma.user_required(function(){
+        window.app.scene.active('loading')
+        window.app.oma.get_lists(function(){
+            window.app.scene.active('dashboard');
+        });
+    },function(){
         window.location.href = '/';
-    });
-    window.app.scene.active('loading')
-    window.app.oma.get_lists(function(){
-        window.app.scene.active('dashboard');
     });
 })
 
 window.app.router.route('list/[a-zA-Z0-9_-]{24}',function(e){
     window.app.oma.user_required(function(){
+        window.app.scene.active('loading');
+        window.app.oma.get_list_items(window.location.href.match('list/([a-zA-Z0-9_-]{24})')[1] ,function(){
+            window.app.scene.active('list');
+        });
+    },function(){
         window.location.href = '/';
-    });
-    window.app.scene.active('loading');
-    window.app.oma.get_list_items(window.location.href.match('list/([a-zA-Z0-9_-]{24})')[1] ,function(){
-
-        window.app.scene.active('list');
     });
 })
 
 window.app.router.route('invite/[a-zA-Z0-9]{24}',function(e){
-    if(window.app.oma.user_invalid()){
+    window.app.scene.active('loading')
+    window.app.oma.user_required(function(){
+        window.app.oma.invited(window.location.href.match('invite/([a-zA-Z0-9_-]{24})')[1],function(){
+            window.location.href = '#list/' + window.location.href.match('invite/([a-zA-Z0-9_-]{24})')[1]
+        })
+    },function(){
         gapi.auth2.getAuthInstance().signIn().then(function(googleUser){ 
-          //  window.app.oma.get_invited()
             var provider = 'google'
             var profile = googleUser.getBasicProfile();
             var email = profile.getEmail();
@@ -52,14 +57,12 @@ window.app.router.route('invite/[a-zA-Z0-9]{24}',function(e){
                 email: email,
                 id_token: id_token,
             },function(){
-                // TODO!
-                //window.app.oma.get_invited()
+                window.app.oma.invited(window.location.href.match('invite/([a-zA-Z0-9_-]{24})')[1],function(){
+                    window.location.href = '#list/' + window.location.href.match('invite/([a-zA-Z0-9_-]{24})')[1]
+                })
             })
         })
-    }else{
-        // TODO!
-        //window.app.oma.get_invited()
-    }
+    })
 })
 
 
