@@ -3,6 +3,7 @@ version: '051001'
 network:
   host: '//localhost'
   port: '4000'
-  api_prefix: '/api/v1'  
+  api_prefix: '/api/v1'
+  cable: '/cable'  
 oauth:
   google: '1056914337357-noqaejishtr7d1ajgmot2rrabgns2u5m.apps.googleusercontent.com'

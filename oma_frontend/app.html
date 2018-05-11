@@ -11,10 +11,12 @@ permalink: '/'
   <meta name="oma-host" content="{{ site.data.app.network.host }}">
   <meta name="oma-port" content="{{ site.data.app.network.port }}">
   <meta name="oma-prefix" content="{{ site.data.app.network.api_prefix }}">
+  <meta name="oma-cable" content="{{ site.data.app.network.cable }}">
   <!-- google yolo -->
   <!-- <script src="https://smartlock.google.com/client"></script> -->
   <!-- 需要signin button才要这个 -->
   <script src="https://apis.google.com/js/platform.js?v={{ site.data.app.version }}&onload=google_ready" async defer></script>
+  <script src="/js/action_cable.js?v={{ site.data.app.version }}"></script>
   <script src="/js/router.js?v={{ site.data.app.version }}"></script>
   <script src="/js/oma_api.js?v={{ site.data.app.version }}"></script>
   <script src="/js/oma_scene.js?v={{ site.data.app.version }}"></script>

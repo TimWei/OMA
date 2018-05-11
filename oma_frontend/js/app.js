@@ -5,7 +5,8 @@ window.app.constants = {
 window.app.oma = new OmaApi({
     host: document.getElementsByName('oma-host')[0].content,
     port: document.getElementsByName('oma-port')[0].content,
-    api_prefix: document.getElementsByName('oma-prefix')[0].content
+    api_prefix: document.getElementsByName('oma-prefix')[0].content,
+    cable: document.getElementsByName('oma-cable')[0].content
 });
 window.app.scene = new OmaScene();
 
