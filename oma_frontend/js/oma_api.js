@@ -14,15 +14,6 @@ function OmaApi() {
   }
 }
 
-OmaApi.prototype.set_user = function (user) {
-  this.user = user
-};
-
-OmaApi.prototype.user_invalid = function (user) {
-  return this.user['access_token'] == '' ? true : false
-};
-
-
 OmaApi.prototype.ping = function (opt) {
   this.get('ping',function(res){
     console.log(res['data'])
@@ -39,6 +30,13 @@ OmaApi.prototype.signin = function (auth_data, callback) {
             email:  user_info['email'],
             access_token: user_info['access_token'],
         });
+    callback();
+  })
+};
+
+OmaApi.prototype.get_lists = function (callback) {
+  this.get('get_lists', function(res){ 
+    console.log(res['data']['lists']) 
     callback();
   })
 };
@@ -78,3 +76,21 @@ OmaApi.prototype.post = function(path, data, callback){
 OmaApi.prototype.api_uri = function(path){
   return this.host + ':' + this.port + this.api_prefix + this.scheme[path]
 }
+
+
+//////User Auth/Validations
+
+OmaApi.prototype.set_user = function (user) {
+  this.user = user
+};
+
+OmaApi.prototype.user_invalid = function (user) {
+  return this.user['access_token'] == '' ? true : false
+};
+
+OmaApi.prototype.user_required = function (callback) {
+    if(this.user_invalid()){
+        callback();
+    }
+};
+

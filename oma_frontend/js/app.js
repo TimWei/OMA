@@ -14,10 +14,13 @@ window.app.router.route('/',function(e){
 })
 
 window.app.router.route('dashboard',function(e){
-    if(window.app.oma.user_invalid()){
-        window.location.href = '#'
-    }
+    window.app.oma.user_required(function(){
+        window.location.href = '/';
+    });
     window.app.scene.active('loading')
+    window.app.oma.get_lists(function(){
+        window.app.scene.active('dashboard');
+    });
 })
 
 
