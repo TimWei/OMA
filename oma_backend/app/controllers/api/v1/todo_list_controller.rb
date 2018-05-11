@@ -44,18 +44,14 @@ class Api::V1::TodoListController < AuthController
 
 	def invite
 		list = TodoList.where(short_cut: params[:short_cut] ).first 
-		participant = Participant.new(user: @user, list: list)
-		ActiveRecord::Base.transaction do
-			begin
-				list.save
-				participant.save
-				@res[:data][:name] = list.name
-				@res[:data][:short_cut] = list.short_cut
-			rescue => e
-				@res[:status] 	= 0
-				@res[:error]  	= 1
-				@res[:msg] 		= "list inviting failed msg:#{e}" 
-			end
+		begin
+			Participant.where(user: @user, list: list).first_or_create
+			@res[:data][:name] = list.name
+			@res[:data][:short_cut] = list.short_cut
+		rescue => e
+			@res[:status] 	= 0
+			@res[:error]  	= 1
+			@res[:msg] 		= "list inviting failed msg:#{e}" 
 		end
 		send_res
 	end
