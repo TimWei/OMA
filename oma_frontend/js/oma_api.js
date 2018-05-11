@@ -62,7 +62,10 @@ OmaApi.prototype.get_list_items = function(short_cut, callback){
   that = this;
   this.get('get_list_items', {short_cut: short_cut},function(res){
     console.log(res)
-    that.append_list_item();
+    that.clear_items();
+    that.set_list_title(res.data.list.name);
+    that.set_share_link(res.data.list.short_cut);
+    that.append_list_item(res.data.list.items);
     callback();
   })
 }
@@ -142,6 +145,44 @@ OmaApi.prototype.clear_lists = function(){
   })
 }
 
+OmaApi.prototype.clear_items = function(){
+  lists = document.getElementsByClassName('items')[0];
+  // TODO BUGG!!
+  Array.from(lists.children).forEach(function(e){
+    if(!e.classList.contains('new_item') && !e.classList.contains('new_item_form') ){e.remove()}
+  })
+}
+
+OmaApi.prototype.set_list_title = function(list_name){
+  document.getElementById('list_name').textContent = list_name;
+}
+
+OmaApi.prototype.set_share_link = function(short_cut){
+  document.getElementById('share_link').textContent = window.location.origin + '/#invite/' + short_cut;
+}
+
+OmaApi.prototype.append_list_item = function(data){
+  lists = document.getElementsByClassName('items')[0];
+  data.forEach(function(data){
+    ele = document.createElement('li');
+    ele.textContent = data.content;
+    ele.setAttribute('data-list-item-id',data.id);
+    ele.setAttribute('data-list-item-finished',data.finished);
+    ele.className = data.finished ? 'done' : 'undone'
+    fin_btn = document.createElement('button');
+    fin_btn.className = 'fin'
+    fin_btn.textContent = 'V'
+    del_btn = document.createElement('button');
+    del_btn.className = 'del'
+    del_btn.textContent = 'X'
+    ele.append(fin_btn);
+    ele.append(del_btn);
+    // ele.onclick = function(){window.location.href = '#list/' + data.short_cut}
+    lists.prepend(ele);
+  });
+  console.log('TODO append list_item')
+}
+
 OmaApi.prototype.append_list = function(data){
   lists = document.getElementsByClassName('lists')[0];
   data.forEach(function(data){
@@ -151,9 +192,6 @@ OmaApi.prototype.append_list = function(data){
     ele.onclick = function(){window.location.href = '#list/' + data.short_cut}
     lists.prepend(ele);
   });
-}
-OmaApi.prototype.append_list_item = function(data){
-  console.log('TODO append list_item')
 }
 
 //////User Auth/Validations

@@ -133,5 +133,70 @@ h1 {
 			}
 		}
 	}
+	#list {
+		.share_link {
+		    margin: 25px;
+		}
+		.items {
+			li {
+				height: 75px;
+			    width: 55%;
+			    background-color: palegoldenrod;
+			    margin-bottom: 20px;
+	    	    border-radius: 15px;
+			    border-color: darkkhaki;
+			    border-width: 0px 2px 2px 0px;
+			    border-style: double;
+			    list-style-type: none;
+			    padding-left: 15px;
+			    padding-top: 15px;
+			    button {
+					float: left;
+				   	margin-right: 15px;
+					cursor: pointer;
+				    font-size: x-large;
+				    &.fin {
+					    border-radius: 90px;
+					    background-color: springgreen;
+				    }
+				    &.del {
+				    	float: right;
+					    position: relative;
+					    top: -18px;
+					    right: -20px;
+					    background-color: red;
+					    border-width: 0px;
+				    }
+			    }
+			    &#new_item {
+					width: 10%;
+				    height: 45px;
+				    border-radius: 26px;
+				    background-color: beige;
+			    }
+			    &#new_item_form {
+			    	display: none;
+			    	cursor: default;
+			    	input {
+			    	    height: 35px;
+					    font-size: x-large;
+					    border-radius: 13px;
+					    width: 50%;
+			    	}
+			    	button {
+				    	margin-left: 15px;
+					    font-size: xx-large;
+					    border-radius: 13px;
+					    &.yes {
+						    background-color: greenyellow;
+					    }
+					    &.no {
+					    	background-color: red;
+					    }
+			    	}
+			    }
+			}
+		}
+	}
 }
 

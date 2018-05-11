@@ -103,3 +103,17 @@ function new_form_submit(){
         window.app.scene.active('dashboard');
     })
 }
+
+// list items controll callback
+function open_new_item_form(){
+    window.app.oma.toggle("new_item_form","list-item");
+    window.app.oma.toggle("new_item","none");
+}
+function close_new_item_form(){
+    window.app.oma.toggle("new_item_form","none");
+    window.app.oma.toggle("new_item","list-item");
+}
+function new_item_form_submit(){
+    close_new_item_form();
+    window.app.scene.active('loading');   
+}
