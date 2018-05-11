@@ -4,6 +4,11 @@
 		Here is your lists. 
 	</div>
 	<ul class='lists'>
-		<li class='new'>Add New List..</li>
+		<li class='new' id='new' onclick='open_new_form()'>Add New List..</li>
+		<li class='new_form' id='new_form'>
+			<input class='new_form_name' id='new_form_name' type='text'>
+			<button class='yes' onclick='new_form_submit()'>O</button>
+			<button class='no' onclick='close_new_form()'>X</button>
+		</li>
 	</ul>
 </div>

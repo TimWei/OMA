@@ -11,6 +11,7 @@ function OmaApi() {
     'ping': '/server/ping',
     'signin': '/users/auth',
     'get_lists': '/todo_lists',
+    'post_lists': '/todo_lists',
   }
 }
 
@@ -41,7 +42,19 @@ OmaApi.prototype.get_lists = function (callback) {
     console.log(res['data']['lists']) 
     lists_data = res['data']['lists'];
     that.clear_lists();
-    that.create_list(lists_data)
+    that.append_list(lists_data)
+    callback();
+  })
+};
+
+OmaApi.prototype.post_lists = function (list_name, callback) {
+  that = this;
+  this.post('post_lists', {
+    access_token: this.user.access_token,
+    list_name: list_name
+  } , function(res){ 
+    console.log(res);
+    that.append_list([res['data']]);
     callback();
   })
 };
@@ -83,6 +96,16 @@ OmaApi.prototype.api_uri = function(path){
 }
 
 ////// DOM controller
+OmaApi.prototype.toggle = function(id, display) {
+  ele = document.getElementById(id);
+  atr = ele.style.display;
+  if(atr != display ){
+    ele.style.display = display;
+  }else{
+    ele.style.display = 'none';
+  }
+//  window.app.oma.toggle('new_form_name')
+}
 
 OmaApi.prototype.set_greeting = function(){
   document.getElementById('user_name').textContent = that.user.name;
@@ -91,11 +114,11 @@ OmaApi.prototype.set_greeting = function(){
 OmaApi.prototype.clear_lists = function(){
   lists = document.getElementsByClassName('lists')[0];
   Array.from(lists.children).forEach(function(e){
-    if(!e.classList.contains('new')){e.remove()}
+    if(e.classList.length == 0){e.remove()}
   })
 }
 
-OmaApi.prototype.create_list = function(data){
+OmaApi.prototype.append_list = function(data){
   lists = document.getElementsByClassName('lists')[0];
   console.log(data);
   data.forEach(function(data){

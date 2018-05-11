@@ -97,11 +97,35 @@ h1 {
 			    &:hover {
 			    	background-color: $app-list-hover;
 			    }
-			    &.new {
+			    &#new {
 					width: 10%;
 				    height: 45px;
 				    border-radius: 26px;
-				    background-color: beige
+				    background-color: beige;
+			    }
+			    &#new_form {
+			    	display: none;
+			    	cursor: default;
+			    	&:hover {
+			    		background-color: $app-list; 
+			    	}
+			    	input {
+			    	    height: 35px;
+					    font-size: x-large;
+					    border-radius: 13px;
+					    width: 50%;
+			    	}
+			    	button {
+				    	margin-left: 15px;
+					    font-size: xx-large;
+					    border-radius: 13px;
+					    &.yes {
+						    background-color: greenyellow;
+					    }
+					    &.no {
+					    	background-color: red;
+					    }
+			    	}
 			    }
 			}
 		}

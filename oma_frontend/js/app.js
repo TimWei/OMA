@@ -24,7 +24,7 @@ window.app.router.route('dashboard',function(e){
 })
 
 
-// google auth stuff
+// google auth callback
 window.onbeforeunload = function(e){
     if(window.app.constants.auto_signout){
       gapi.auth2.getAuthInstance().signOut();
@@ -44,3 +44,20 @@ function google_signin(googleUser){
     })
 }
 
+// lists controll callback
+function open_new_form(){
+    window.app.oma.toggle("new_form","list-item");
+    window.app.oma.toggle("new","none");
+}
+function close_new_form(){
+    window.app.oma.toggle("new_form","none");
+    window.app.oma.toggle("new","list-item");
+}
+function new_form_submit(){
+    close_new_form();
+    window.app.scene.active('loading');
+    window.app.oma.post_lists(window.new_form_name.value, function(e){
+        console.log('e')
+        window.app.scene.active('dashboard');
+    })
+}
