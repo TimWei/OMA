@@ -26,8 +26,15 @@ h1 {
 		a {
 			display: inline-block;
 			height: 100%;
+			text-decoration: none;
 			img {
 				height: 100%;
+			}
+			span {
+			    color: black;
+			    font-weight: bold;
+			    position: relative;
+			    bottom: 8px;
 			}
 		}
 		h1{
