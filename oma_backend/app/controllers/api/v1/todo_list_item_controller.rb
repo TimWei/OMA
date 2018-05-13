@@ -4,7 +4,7 @@ class Api::V1::TodoListItemController < AuthController
 		@res[:data][:list] = {
 			name: @list.name,
 			short_cut: @list.short_cut,
-			items: @list.items.map{|t| {id: t.id, content: t.content, finished: t.finished} }
+			items: @list.items.active.map{|t| {id: t.id, content: t.content, finished: t.finished, is_delete: t.is_delete} }
 		}
 		send_res 
 	end
@@ -13,21 +13,47 @@ class Api::V1::TodoListItemController < AuthController
 		item = TodoListItem.new(todo_list: @list, content: params[:content])
 		item.finished = false
 		if item.save!
-
 			ActionCable.server.broadcast "list_#{@short_cut}",action: 'append_list_item', data: {
 				id: item.id,
 				content: item.content,
 				finished: item.finished,
+				is_delete: item.is_delete
 			}
 
 			@res[:data][:item] = {
 				id: item.id,
 				content: item.content,
 				finished: item.finished,
+				is_delete: item.is_delete
 			}
 		else
 			@res[:error] = 1
 			@res[:msg]	 = 'list-item creating failed'
+		end
+		send_res
+	end
+
+	def update
+		item = @list.items.active.where(id: params[:id]).first
+		item.finished = params[:finished]
+		item.is_delete = params[:is_delete]
+		if item.save!
+			ActionCable.server.broadcast "list_#{@short_cut}",action: 'update_list_item', data: {
+				id: item.id,
+				content: item.content,
+				finished: item.finished,
+				is_delete: item.is_delete,
+			}
+			
+			@res[:data][:item] = {
+				id: item.id,
+				content: item.content,
+				finished: item.finished,
+				is_delete: item.is_delete
+			}
+		else
+			@res[:error] = 1
+			@res[:msg]	 = 'list-item updating failed'
 		end
 		send_res
 	end

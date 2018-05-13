@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180509100218) do
+ActiveRecord::Schema.define(version: 20180513134525) do
 
   create_table "participants", force: :cascade do |t|
     t.integer  "user_id"
@@ -26,8 +26,9 @@ ActiveRecord::Schema.define(version: 20180509100218) do
     t.text     "content"
     t.boolean  "finished"
     t.string   "lock_version"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.boolean  "is_delete",    default: false
     t.index ["todo_list_id"], name: "index_todo_list_items_on_todo_list_id"
   end
 

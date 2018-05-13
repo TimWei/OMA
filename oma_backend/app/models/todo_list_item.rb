@@ -9,6 +9,7 @@
 #  lock_version :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  is_delete    :boolean          default(FALSE)
 #
 # Indexes
 #
@@ -17,4 +18,6 @@
 
 class TodoListItem < ApplicationRecord
 	belongs_to :todo_list
+	scope :active, -> { where(is_delete: false) }
+  
 end

@@ -9,6 +9,7 @@
 #  lock_version :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  is_delete    :boolean          default(FALSE)
 #
 # Indexes
 #
