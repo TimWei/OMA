@@ -137,6 +137,10 @@ h1 {
 	#list {
 		.share_link {
 		    margin: 25px;
+		    #share_link_url {
+			    color: blue;
+			    font-weight: bold;
+		    }
 		}
 		.items {
 			li {

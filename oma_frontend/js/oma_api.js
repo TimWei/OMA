@@ -1,20 +1,22 @@
 
 function OmaApi(opt={}) {
-  this.user= {
+  this.user = {
     name: '',
     access_token: ''
   }
   this.host = opt['host']
   this.port = opt['port']
   this.api_prefix = opt['api_prefix']
-  this.cable = ActionCable.createConsumer('ws://' + this.host + ':' + this.port + opt['cable'] );
-  this.scheme = {
+  this.cable      = ActionCable.createConsumer('ws://' + this.host + ':' + this.port + opt['cable'] );
+  this.list_channel    = null
+  this.scheme     = {
     'ping': '/server/ping',
     'signin': '/users/auth',
     'get_lists': '/todo_lists',
     'post_lists': '/todo_lists',
+    'invited' : '/todo_lists/invite',
     'get_list_items': '/todo_lists/:short_cut/items',
-    'invited' : '/todo_lists/invite'
+    'post_list_items': '/todo_lists/:short_cut/items'
   }
 }
 
@@ -25,7 +27,7 @@ OmaApi.prototype.ping = function (opt) {
 
 OmaApi.prototype.signin = function (auth_data, callback) {
   let that = this;
-  this.post('signin', auth_data, function(res){ 
+  this.post('signin',{}, auth_data, function(res){ 
     user_info = res['data'];
     that.set_user({
             name: user_info['name'],
@@ -49,7 +51,7 @@ OmaApi.prototype.get_lists = function (callback) {
 
 OmaApi.prototype.post_lists = function (list_name, callback) {
   that = this;
-  this.post('post_lists', {
+  this.post('post_lists',{}, {
     access_token: this.user.access_token,
     list_name: list_name
   } , function(res){ 
@@ -65,14 +67,26 @@ OmaApi.prototype.get_list_items = function(short_cut, callback){
     that.clear_items();
     that.set_list_title(res.data.list.name);
     that.set_share_link(res.data.list.short_cut);
-    that.append_list_item(res.data.list.items);
+    that.append_list_items(res.data.list.items);
+    that.connect_channel(short_cut);
+    callback();
+  })
+}
+
+OmaApi.prototype.post_list_items = function(data, callback){
+  that = this;
+  console.log(data)
+  this.post('post_list_items',{short_cut: data.short_cut}, {
+    access_token: this.user.access_token,
+    content: data.content
+  } , function(res){ 
     callback();
   })
 }
 
 OmaApi.prototype.invited = function(short_cut, callback){
   that = this;
-  this.post('invited', {
+  this.post('invited',{}, {
     short_cut: short_cut,
     access_token: this.user.access_token,
   },function(res){
@@ -96,9 +110,9 @@ OmaApi.prototype.get = function(path, opt, callback){
   xhr.send();
 }
 
-OmaApi.prototype.post = function(path, data, callback){
+OmaApi.prototype.post = function(path, opt, data, callback){
   var xhr = new XMLHttpRequest();
-  uri = this.api_uri(path)
+  uri = this.api_uri(path, opt)
   xhr.open('POST', uri);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.onload = function() {
@@ -147,7 +161,6 @@ OmaApi.prototype.clear_lists = function(){
 
 OmaApi.prototype.clear_items = function(){
   lists = document.getElementsByClassName('items')[0];
-  // TODO BUGG!!
   Array.from(lists.children).forEach(function(e){
     if(!e.classList.contains('new_item') && !e.classList.contains('new_item_form') ){e.remove()}
   })
@@ -158,32 +171,19 @@ OmaApi.prototype.set_list_title = function(list_name){
 }
 
 OmaApi.prototype.set_share_link = function(short_cut){
-  document.getElementById('share_link').textContent = window.location.origin + '/#invite/' + short_cut;
+  document.getElementById('share_link_url').textContent = window.location.origin + '/#invite/' + short_cut;
 }
 
-OmaApi.prototype.append_list_item = function(data){
+OmaApi.prototype.append_list_items = function(data){
   lists = document.getElementsByClassName('items')[0];
+  that = this;
   if(data.length == 0){
     ele = document.createElement('h3');
     ele.textContent = 'No Tasks yet!';
     lists.prepend(ele);
   }else{
     data.forEach(function(row){
-        ele = document.createElement('li');
-        ele.textContent = row.content;
-        ele.setAttribute('data-list-item-id',row.id);
-        ele.setAttribute('data-list-item-finished',row.finished);
-        ele.className = row.finished ? 'done' : 'undone'
-        fin_btn = document.createElement('button');
-        fin_btn.className = 'fin'
-        fin_btn.textContent = 'V'
-        del_btn = document.createElement('button');
-        del_btn.className = 'del'
-        del_btn.textContent = 'X'
-        ele.append(fin_btn);
-        ele.append(del_btn);
-        // ele.onclick = function(){window.location.href = '#list/' + row.short_cut}
-        lists.prepend(ele);
+        that.append_list_item(row)
     });
   }
 }
@@ -199,6 +199,24 @@ OmaApi.prototype.append_list = function(data){
   });
 }
 
+OmaApi.prototype.append_list_item = function(data){
+  lists = document.getElementsByClassName('items')[0];
+  ele = document.createElement('li');
+  ele.textContent = data.content;
+  ele.setAttribute('data-list-item-id',data.id);
+  ele.className = data.finished;
+  fin_btn = document.createElement('button');
+  fin_btn.className = 'fin'
+  fin_btn.textContent = 'V'
+  del_btn = document.createElement('button');
+  del_btn.className = 'del'
+  del_btn.textContent = 'X'
+  ele.append(fin_btn);
+  ele.append(del_btn);
+  lists.prepend(ele);
+}
+
+
 //////User Auth/Validations
 OmaApi.prototype.set_user = function (user) {
   this.user = user
@@ -208,11 +226,38 @@ OmaApi.prototype.user_invalid = function (user) {
   return this.user['access_token'] == '' ? true : false
 };
 
-OmaApi.prototype.user_required = function (valid, invalid) {
+OmaApi.prototype.user_required = function (valid_callback, invalid_callback) {
   if(this.user_invalid()){
-    invalid();
+    invalid_callback();
   }else{
-    valid();
+    valid_callback();
   }
 };
 
+
+//////Websockets
+OmaApi.prototype.connect_channel = function(short_cut){
+  if(this.list_channel){
+    console.log('Unsubscribe existing channel');
+    this.cable.subscriptions.remove(this.list_channel);
+  }
+  this.list_channel = this.cable.subscriptions.create({ 
+    channel: "ListChannel", 
+    short_cut: short_cut, 
+    access_token: this.user.access_token }, 
+    {
+      connected: function () {
+        console.log("channel: connected");
+      },
+      disconnected: function () {
+        console.log("channel: disconnected");
+      },
+      rejected: function () {
+        console.log("channel: rejected");
+      },
+      received: function (res) {
+        eval('window.app.oma.' + res.action + '(' + JSON.stringify(res.data) + ')');
+      }
+    }
+  );
+}

@@ -43,8 +43,8 @@ window.app.router.route('list/[a-zA-Z0-9_-]{24}',function(e){
 window.app.router.route('invite/[a-zA-Z0-9]{24}',function(e){
     window.app.scene.active('loading')
     window.app.oma.user_required(function(){
-        window.app.oma.invited(window.location.href.match('invite/([a-zA-Z0-9_-]{24})')[1],function(){
-            window.location.href = '#list/' + window.location.href.match('invite/([a-zA-Z0-9_-]{24})')[1]
+        window.app.oma.invited(get_short_cut(),function(){
+            window.location.href = '#list/' + get_short_cut()
         })
     },function(){
         gapi.auth2.getAuthInstance().signIn().then(function(googleUser){ 
@@ -57,14 +57,17 @@ window.app.router.route('invite/[a-zA-Z0-9]{24}',function(e){
                 email: email,
                 id_token: id_token,
             },function(){
-                window.app.oma.invited(window.location.href.match('invite/([a-zA-Z0-9_-]{24})')[1],function(){
-                    window.location.href = '#list/' + window.location.href.match('invite/([a-zA-Z0-9_-]{24})')[1]
+                window.app.oma.invited(get_short_cut(),function(){
+                    window.location.href = '#list/' + get_short_cut()
                 })
             })
         })
     })
 })
-
+// helper 
+function get_short_cut(){
+    return window.location.href.match('/([a-zA-Z0-9_-]{24})')[1]
+}
 
 // google auth callback
 window.onbeforeunload = function(e){
@@ -99,7 +102,6 @@ function new_form_submit(){
     close_new_form();
     window.app.scene.active('loading');
     window.app.oma.post_lists(window.new_form_name.value, function(e){
-        console.log('e')
         window.app.scene.active('dashboard');
     })
 }
@@ -115,5 +117,10 @@ function close_new_item_form(){
 }
 function new_item_form_submit(){
     close_new_item_form();
-    window.app.scene.active('loading');   
+    window.app.oma.post_list_items({
+        short_cut: get_short_cut(),
+        content: window.new_item_form_name.value
+    }, function(e){
+        window.new_item_form_name.value = '';
+    })
 }
