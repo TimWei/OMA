@@ -16,7 +16,8 @@ function OmaApi(opt={}) {
     'post_lists': '/todo_lists',
     'invited' : '/todo_lists/invite',
     'get_list_items': '/todo_lists/:short_cut/items',
-    'post_list_items': '/todo_lists/:short_cut/items'
+    'post_list_items': '/todo_lists/:short_cut/items',
+    'put_list_items': '/todo_lists/:short_cut/items/:id',
   }
 }
 
@@ -84,6 +85,18 @@ OmaApi.prototype.post_list_items = function(data, callback){
   })
 }
 
+OmaApi.prototype.put_list_items = function(data, callback){
+  that = this;
+  console.log(data)
+  this.put('put_list_items',{id: data.id,short_cut: data.short_cut}, {
+    access_token: this.user.access_token,
+    finished: data.finished,
+    is_delete: data.is_delete 
+  }, function(res){ 
+    callback();
+  })
+}
+
 OmaApi.prototype.invited = function(short_cut, callback){
   that = this;
   this.post('invited',{}, {
@@ -95,28 +108,28 @@ OmaApi.prototype.invited = function(short_cut, callback){
 }
 
 OmaApi.prototype.get = function(path, opt, callback){
-  var xhr = new XMLHttpRequest();
-  uri = this.api_uri(path, opt) + '?access_token=' + this.user.access_token
-  xhr.open('GET', uri);
-  xhr.onload = function() {
-      res = JSON.parse(xhr.responseText)
-      if (xhr.status === 200 && res['error'] != 1) {
-        callback(res);
-      }
-      else {
-        alert('XHR Failed: ' + xhr.status);
-      }
-  };
-  xhr.send();
+  this.xhr('GET', path, opt, null, callback);
 }
 
 OmaApi.prototype.post = function(path, opt, data, callback){
+  this.xhr('POST', path, opt, data, callback);
+}
+
+OmaApi.prototype.put = function(path, opt, data, callback){
+  this.xhr('PUT', path, opt, data, callback);
+}
+
+OmaApi.prototype.xhr = function(method, path, opt, data, callback){
   var xhr = new XMLHttpRequest();
   uri = this.api_uri(path, opt)
-  xhr.open('POST', uri);
+  if(method == 'GET'){
+    uri += '?access_token=' + this.user.access_token
+  } 
+  xhr.open(method, uri);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.onload = function() {
-      if (xhr.status === 200) {
+      res = JSON.parse(xhr.responseText)
+      if (xhr.status === 200 && res['error'] != 1) {
         callback(JSON.parse(xhr.responseText));
       }
       else if (xhr.status !== 200) {
@@ -206,16 +219,72 @@ OmaApi.prototype.append_list_item = function(data){
   ele.setAttribute('data-list-item-id',data.id);
   ele.className = data.finished;
   fin_btn = document.createElement('button');
-  fin_btn.className = 'fin'
-  fin_btn.textContent = 'V'
+  this.set_fin_btn(fin_btn, data);
   del_btn = document.createElement('button');
-  del_btn.className = 'del'
-  del_btn.textContent = 'X'
+  this.set_del_btn(del_btn, data);
   ele.append(fin_btn);
   ele.append(del_btn);
   lists.prepend(ele);
 }
 
+OmaApi.prototype.set_fin_btn = function(ele, data){
+  that = this;
+  if(data.finished){
+    ele.className = 'rec'
+    ele.textContent = 'R';
+  }else{
+    ele.className = 'fin'
+    ele.textContent = 'V';
+  }
+
+  ele.onclick = function(){ 
+    that.put_list_items({
+      short_cut: window.location.href.match('/([a-zA-Z0-9_-]{24})')[1],
+      ele: ele,
+      id: data.id,
+      finished: !data.finished,
+      is_delete: data.is_delete 
+    },function(){
+    })
+  } 
+}
+
+OmaApi.prototype.set_del_btn = function(ele, data){
+  ele.className = 'del'
+  ele.textContent = 'X'
+  ele.onclick = function(){
+    chk = confirm('Delete this Task?'); 
+    if(chk){
+      that.put_list_items({
+        short_cut: window.location.href.match('/([a-zA-Z0-9_-]{24})')[1],
+        ele: ele,
+        id: data.id,
+        finished: !data.finished,
+        is_delete: true 
+      },function(){
+
+      })
+    }
+  } 
+}
+
+OmaApi.prototype.update_list_item = function(data){
+  console.log(data);
+  list = document.getElementsByClassName('items')[0]
+  that = this;
+  Array.from(list.children).forEach(function(e){
+    if(e.dataset.listItemId == data.id){
+      if(!data.is_delete){
+        e.className = data.finished;
+        btn_cls = data.finished ? 'fin' : 'rec'
+        fin_btn = e.getElementsByClassName(btn_cls)[0];
+        that.set_fin_btn(fin_btn, data);
+      }else{
+        e.remove();
+      }
+    }
+  })
+}
 
 //////User Auth/Validations
 OmaApi.prototype.set_user = function (user) {
