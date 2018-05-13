@@ -1,4 +1,3 @@
-
 function OmaApi(opt={}) {
   this.user = {
     name: '',
@@ -106,6 +105,8 @@ OmaApi.prototype.invited = function(short_cut, callback){
     callback();
   })
 }
+
+// Networking
 
 OmaApi.prototype.get = function(path, opt, callback){
   this.xhr('GET', path, opt, null, callback);
