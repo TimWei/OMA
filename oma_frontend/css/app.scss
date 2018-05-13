@@ -172,6 +172,13 @@ h1 {
 					    background-color: red;
 					    border-width: 0px;
 				    }
+				    &.rec {
+					    border-radius: 90px;
+					    background-color: cadetblue;
+				    }
+			    }
+			    &.true {
+			    	background-color: darkgray;
 			    }
 			    &#new_item {
 					width: 10%;
