@@ -163,24 +163,29 @@ OmaApi.prototype.set_share_link = function(short_cut){
 
 OmaApi.prototype.append_list_item = function(data){
   lists = document.getElementsByClassName('items')[0];
-  data.forEach(function(data){
-    ele = document.createElement('li');
-    ele.textContent = data.content;
-    ele.setAttribute('data-list-item-id',data.id);
-    ele.setAttribute('data-list-item-finished',data.finished);
-    ele.className = data.finished ? 'done' : 'undone'
-    fin_btn = document.createElement('button');
-    fin_btn.className = 'fin'
-    fin_btn.textContent = 'V'
-    del_btn = document.createElement('button');
-    del_btn.className = 'del'
-    del_btn.textContent = 'X'
-    ele.append(fin_btn);
-    ele.append(del_btn);
-    // ele.onclick = function(){window.location.href = '#list/' + data.short_cut}
+  if(data.length == 0){
+    ele = document.createElement('h3');
+    ele.textContent = 'No Tasks yet!';
     lists.prepend(ele);
-  });
-  console.log('TODO append list_item')
+  }else{
+    data.forEach(function(row){
+        ele = document.createElement('li');
+        ele.textContent = row.content;
+        ele.setAttribute('data-list-item-id',row.id);
+        ele.setAttribute('data-list-item-finished',row.finished);
+        ele.className = row.finished ? 'done' : 'undone'
+        fin_btn = document.createElement('button');
+        fin_btn.className = 'fin'
+        fin_btn.textContent = 'V'
+        del_btn = document.createElement('button');
+        del_btn.className = 'del'
+        del_btn.textContent = 'X'
+        ele.append(fin_btn);
+        ele.append(del_btn);
+        // ele.onclick = function(){window.location.href = '#list/' + row.short_cut}
+        lists.prepend(ele);
+    });
+  }
 }
 
 OmaApi.prototype.append_list = function(data){
