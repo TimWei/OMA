@@ -160,19 +160,24 @@ h1 {
 		    overflow: hidden;
 		    margin-left: 40px;
 		    max-height: 115px;
+		    .desc {
+		    	float: left;
+		    }
 		    &.active {
 		    	max-height: max-content;;
 		    }
 		    ul {
+		    	display: inline-block;
 		    	list-style: none;
 		    	background-color: cornsilk;
 			    border-radius: 15px;
 			    cursor: pointer;
-				width: 50%;
 			    padding-bottom: 15px;
 			    padding-top: 15px;
+				padding-right: 40px;
 			    li{
 				    padding-left: 10px;
+				    margin-bottom: 3px;
 				    span {
 			    	    margin-right: 5px;
 			    	    &.user{
