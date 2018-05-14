@@ -33,10 +33,11 @@ We will use built-in development server, and SQLite3 as database for quick start
 
 
 ### Setup frontend
-The frontend bundler using Jekyll by default, you should configure application's backend settings first 
-`vim oma_frontend/_data/app.yml`
+The frontend bundler using Jekyll as default. before building you should configure application's backend settings by modified `app.yml`. 
 
 p.s. Rails built-in server will run on 3000 port by default
+
+`vim oma_frontend/_data/app.yml`
 
 ```yaml
 network:
@@ -63,12 +64,15 @@ If all these steps finished in right way. OMA is ready for use!
 
 ## Production Mode
 As we using built-in server for quick start, you might want to setup production configuration for both performance and security.here are some suggestion you could following:
+
 ### Database
-TODO
+You may want to change Database from SQLite to MySQL by following [How To Use MySQL with Your Ruby on Rails Application](https://www.digitalocean.com/community/tutorials/how-to-use-mysql-with-your-ruby-on-rails-application-on-ubuntu-14-04)
+
 ### Rails Production Secret
-TODO
+If you run Rails in Production mode without setup production secrets. the error will raised. make sure you've set `SECRET_KEY_BASE` in environment variables.
+
 ### Web Server
-TODO
+I recommended Nginx + Passenger for Rails productions. [Introduction to configuring Passenger + Nginx](https://www.phusionpassenger.com/library/config/nginx/intro.html)
 
 
 ## Create your own OMA appliction?
