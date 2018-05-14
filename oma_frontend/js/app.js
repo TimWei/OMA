@@ -89,7 +89,7 @@ function google_signin(googleUser){
     })
 }
 
-// lists controll callback
+// lists control callback
 function open_new_form(){
     window.app.oma.toggle("new_form","list-item");
     window.app.oma.toggle("new","none");
@@ -106,7 +106,7 @@ function new_form_submit(){
     })
 }
 
-// list items controll callback
+// list items control callback
 function open_new_item_form(){
     window.app.oma.toggle("new_item_form","list-item");
     window.app.oma.toggle("new_item","none");
@@ -123,4 +123,14 @@ function new_item_form_submit(){
     }, function(e){
         window.new_item_form_name.value = '';
     })
+}
+
+// activities control callback
+function activity_toggle(){
+    ele = document.getElementsByClassName('activity')[0]
+    if(ele.classList.contains('active')){
+        ele.classList.remove('active')
+    }else{
+        ele.classList.add('active')
+    }
 }

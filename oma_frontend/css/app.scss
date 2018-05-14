@@ -147,11 +147,50 @@ h1 {
 	}
 	#list {
 		.share_link {
-		    margin: 25px;
+		    margin-top: 40px;
+		    margin-left: 40px;
+		    margin-bottom: 25px;
 		    #share_link_url {
 			    color: blue;
 			    font-weight: bold;
 		    }
+		}
+		.activity {
+			list-style: none;
+		    overflow: hidden;
+		    margin-left: 40px;
+		    max-height: 115px;
+		    &.active {
+		    	max-height: max-content;;
+		    }
+		    ul {
+		    	list-style: none;
+		    	background-color: cornsilk;
+			    border-radius: 15px;
+			    cursor: pointer;
+				width: 50%;
+			    padding-bottom: 15px;
+			    padding-top: 15px;
+			    li{
+				    padding-left: 10px;
+				    span {
+			    	    margin-right: 5px;
+			    	    &.user{
+			    	    	font-weight: bolder;
+			    	    	color: slategrey;	
+			    	    }
+			    	    &.content {
+			    	    	color: darkred;
+	    					font-weight: bolder;
+			    	    }
+			    	    &.date {
+			    	    	color: grey;
+	    					font-size: xx-small;
+			    	    }
+				    }
+			    }
+			}
+
 		}
 		.items {
 			li {

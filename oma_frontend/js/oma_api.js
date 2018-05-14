@@ -69,6 +69,7 @@ OmaApi.prototype.get_list_items = function(short_cut, callback){
     that.set_list_title(res.data.list.name);
     that.set_share_link(res.data.list.short_cut);
     that.append_list_items(res.data.list.items);
+    that.append_list_activities(res.data.list.history);
     that.connect_channel(short_cut);
     callback();
   })
@@ -203,6 +204,14 @@ OmaApi.prototype.append_list_items = function(data){
   }
 }
 
+OmaApi.prototype.append_list_activities = function(data){
+  history = document.getElementsByClassName('history')[0];
+  that = this;
+  data.forEach(function(row){
+    that.append_list_activity(row)
+  });
+}
+
 OmaApi.prototype.append_list = function(data){
   lists = document.getElementsByClassName('lists')[0];
   data.forEach(function(data){
@@ -227,6 +236,28 @@ OmaApi.prototype.append_list_item = function(data){
   ele.append(fin_btn);
   ele.append(del_btn);
   lists.prepend(ele);
+}
+
+OmaApi.prototype.append_list_activity = function(data){
+  ul = document.getElementsByClassName('history')[0];
+  ele = document.createElement('li');
+  user_s = document.createElement('span');
+  user_s.textContent = data.user
+  user_s.className = 'user'
+  action_s = document.createElement('span');
+  action_s.textContent = data.action
+  action_s.className = 'action'
+  content_s = document.createElement('span');
+  content_s.textContent = data.content
+  content_s.className = 'content'
+  date_s = document.createElement('span');
+  date_s.textContent = data.created_at
+  date_s.className = 'date'
+  ele.append(user_s);
+  ele.append(action_s);
+  ele.append(content_s);
+  ele.append(date_s);
+  ul.prepend(ele);
 }
 
 OmaApi.prototype.set_fin_btn = function(ele, data){
@@ -281,7 +312,9 @@ OmaApi.prototype.update_list_item = function(data){
         btn_cls = data.finished ? 'fin' : 'rec'
         fin_btn = e.getElementsByClassName(btn_cls)[0];
         that.set_fin_btn(fin_btn, data);
+        that.append_list_activity(data.log);
       }else{
+        that.append_list_activity(data.log);
         e.remove();
       }
     }
