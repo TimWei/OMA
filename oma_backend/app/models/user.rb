@@ -16,6 +16,7 @@ class User < ApplicationRecord
 	has_secure_token
 	has_many :participants
 	has_many :lists, through: :participants
+	has_many :action_logs
 	after_create :set_color
 	extend Authable
 	

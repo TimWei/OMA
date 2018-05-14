@@ -20,5 +20,11 @@ class TodoList < ApplicationRecord
 	has_many :participants, foreign_key: :list_id
 	has_many :users, through: :participants
 	has_many :items, class_name: 'TodoListItem'
+	has_many :action_logs
+	has_many :history, as: :logable, class_name: 'ActionLog'
 	has_secure_token :short_cut
+
+	def logged
+		self.name
+	end
 end
