@@ -57,7 +57,7 @@ class Api::V1::TodoListItemController < AuthController
 				if params[:finished]
 					log = ActionLog.create(user: @user, todo_list: @list, action: 'finished', content: item.content, logable: item)
 				else
-					log = ActionLog.create(user: @user, todo_list: @list, action: 'undoned', content: item.content, logable: item)
+					log = ActionLog.create(user: @user, todo_list: @list, action: 'unfinished', content: item.content, logable: item)
 				end
 			end			
 			ActionCable.server.broadcast "list_#{@short_cut}",action: 'update_list_item', data: {
