@@ -84,7 +84,9 @@ function google_invite(googleUser){
         email: email,
         id_token: id_token,
     },function(){
-        window.location.href = '#list/' + get_short_cut()
+        window.app.oma.invited(get_short_cut(),function(){
+            window.location.href = '#list/' + get_short_cut()
+        })
     })
 }
 
