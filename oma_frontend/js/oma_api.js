@@ -6,7 +6,8 @@ function OmaApi(opt={}) {
   this.host = opt['host']
   this.port = opt['port']
   this.api_prefix = opt['api_prefix']
-  this.cable      = ActionCable.createConsumer('ws://' + this.host + ':' + this.port + opt['cable'] );
+  this.cable      = opt['cable']
+  this.comsumer   = ActionCable.createConsumer('ws://' + this.host + ':' + this.port + this.cable);
   this.list_channel    = null
   this.scheme     = {
     'ping': '/server/ping',
@@ -309,9 +310,11 @@ OmaApi.prototype.user_required = function (valid_callback, invalid_callback) {
 OmaApi.prototype.connect_channel = function(short_cut){
   if(this.list_channel){
     console.log('Unsubscribe existing channel');
-    this.cable.subscriptions.remove(this.list_channel);
+    this.comsumer.subscriptions.remove(this.list_channel);
+    this.comsumer = ActionCable.createConsumer('ws://' + this.host + ':' + this.port + this.cable);
+    this.list_channel = null
   }
-  this.list_channel = this.cable.subscriptions.create({ 
+  this.list_channel = this.comsumer.subscriptions.create({ 
     channel: "ListChannel", 
     short_cut: short_cut, 
     access_token: this.user.access_token }, 
