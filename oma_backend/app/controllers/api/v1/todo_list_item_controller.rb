@@ -5,12 +5,12 @@ class Api::V1::TodoListItemController < AuthController
 			name: @list.name,
 			short_cut: @list.short_cut,
 			items: @list.items.active.map{|t| {id: t.id, content: t.content, finished: t.finished, is_delete: t.is_delete} },
-			history: @list.action_logs.map{|t| {
+			history: @list.action_logs.sort_by{|t| t.created_at }.map{|t| {
 					user: t.user,
 					action: t.action,
 					content: t.content,
-					created_at: t.created_at
-				}} 
+					created_at: t.created_at.strftime("%Y-%m-%d %H:%M:%S")
+				}}
 		}
 		send_res 
 	end
@@ -29,7 +29,7 @@ class Api::V1::TodoListItemController < AuthController
 					user: log.user,
 					action: log.action,
 					content: log.content,
-					created_at: log.created_at
+					created_at: log.created_at.strftime("%Y-%m-%d %H:%M:%S")
 				}
 			}
 
@@ -55,9 +55,9 @@ class Api::V1::TodoListItemController < AuthController
 				log = ActionLog.create(user: @user, todo_list: @list, action: 'delete', content: item.content, logable: item)
 			else	
 				if params[:finished]
-					log = ActionLog.create(user: @user, todo_list: @list, action: 'fin', logable: item)
+					log = ActionLog.create(user: @user, todo_list: @list, action: 'fin', content: item.content, logable: item)
 				else
-					log = ActionLog.create(user: @user, todo_list: @list, action: 'res', logable: item)
+					log = ActionLog.create(user: @user, todo_list: @list, action: 'res', content: item.content, logable: item)
 				end
 			end			
 			ActionCable.server.broadcast "list_#{@short_cut}",action: 'update_list_item', data: {
@@ -69,7 +69,7 @@ class Api::V1::TodoListItemController < AuthController
 					user: log.user,
 					action: log.action,
 					content: log.content,
-					created_at: log.created_at
+					created_at: log.created_at.strftime("%Y-%m-%d %H:%M:%S")
 				}
 			}
 			
