@@ -47,21 +47,7 @@ window.app.router.route('invite/[a-zA-Z0-9]{24}',function(e){
             window.location.href = '#list/' + get_short_cut()
         })
     },function(){
-        gapi.auth2.getAuthInstance().signIn().then(function(googleUser){ 
-            var provider = 'google'
-            var profile = googleUser.getBasicProfile();
-            var email = profile.getEmail();
-            var id_token = googleUser.getAuthResponse().id_token;
-            window.app.oma.signin({
-                provider: provider,
-                email: email,
-                id_token: id_token,
-            },function(){
-                window.app.oma.invited(get_short_cut(),function(){
-                    window.location.href = '#list/' + get_short_cut()
-                })
-            })
-        })
+        window.app.scene.active('invite');
     })
 })
 // helper 
@@ -81,11 +67,24 @@ function google_signin(googleUser){
     var email = profile.getEmail();
     var id_token = googleUser.getAuthResponse().id_token;
     window.app.oma.signin({
-    	provider: provider,
-    	email: email,
-    	id_token: id_token,
+        provider: provider,
+        email: email,
+        id_token: id_token,
     },function(){
         window.location.href ="#dashboard"
+    })
+}
+function google_invite(googleUser){
+    var provider = 'google'
+    var profile = googleUser.getBasicProfile();
+    var email = profile.getEmail();
+    var id_token = googleUser.getAuthResponse().id_token;
+    window.app.oma.signin({
+        provider: provider,
+        email: email,
+        id_token: id_token,
+    },function(){
+        window.location.href = '#list/' + get_short_cut()
     })
 }
 
