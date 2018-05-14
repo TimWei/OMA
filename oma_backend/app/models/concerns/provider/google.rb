@@ -17,6 +17,10 @@ class Provider::Google
 		@data['name']
 	end
 
+	def email
+		@data['email']
+	end
+
 	def validation
 		raise 'invalid user' if @data['sub'].nil?
 	end
