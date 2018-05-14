@@ -55,7 +55,8 @@ oauth:
 After backend configuration was done. easily build application by 
 
 1. `cd oma_frontend`
-2. `jekyll build` 
+2. `bundle install`
+3. `jekyll build` 
 and application with assets will generating at `oma_frontend/_site`
 If you dont have web server for hosting statics, There is also built-in web server in Jekyll by:
 `jekyll serve`
@@ -66,7 +67,7 @@ If all these steps finished in right way. OMA is ready for use!
 As we using built-in server for quick start, you might want to setup production configuration for both performance and security.here are some suggestion you could following:
 
 ### Database
-You may want to change Database from SQLite to MySQL by following [How To Use MySQL with Your Ruby on Rails Application](https://www.digitalocean.com/community/tutorials/how-to-use-mysql-with-your-ruby-on-rails-application-on-ubuntu-14-04)
+You may want to change Database from SQLite to MySQL in production for performance. by following [How To Use MySQL with Your Ruby on Rails Application](https://www.digitalocean.com/community/tutorials/how-to-use-mysql-with-your-ruby-on-rails-application-on-ubuntu-14-04)
 
 ### Rails Production Secret
 If you run Rails in Production mode without setup production secrets. the error will raised. make sure you've set `SECRET_KEY_BASE` in environment variables.
