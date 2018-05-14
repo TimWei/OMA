@@ -18,6 +18,10 @@
 
 class TodoListItem < ApplicationRecord
 	belongs_to :todo_list
+	has_many :history, as: :logable, class_name: 'ActionLog'
 	scope :active, -> { where(is_delete: false) }
-  
+  	
+  	def logged
+  		self.content
+  	end
 end

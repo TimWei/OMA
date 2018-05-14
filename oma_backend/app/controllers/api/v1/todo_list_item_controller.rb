@@ -4,7 +4,13 @@ class Api::V1::TodoListItemController < AuthController
 		@res[:data][:list] = {
 			name: @list.name,
 			short_cut: @list.short_cut,
-			items: @list.items.active.map{|t| {id: t.id, content: t.content, finished: t.finished, is_delete: t.is_delete} }
+			items: @list.items.active.map{|t| {id: t.id, content: t.content, finished: t.finished, is_delete: t.is_delete} },
+			history: @list.action_logs.map{|t| {
+					user: t.user,
+					action: t.action,
+					content: t.content,
+					created_at: t.created_at
+				}} 
 		}
 		send_res 
 	end
@@ -13,11 +19,18 @@ class Api::V1::TodoListItemController < AuthController
 		item = TodoListItem.new(todo_list: @list, content: params[:content])
 		item.finished = false
 		if item.save!
+			log = ActionLog.create(user: @user, todo_list: @list, action: 'create', content: item.content, logable: item)
 			ActionCable.server.broadcast "list_#{@short_cut}",action: 'append_list_item', data: {
 				id: item.id,
 				content: item.content,
 				finished: item.finished,
-				is_delete: item.is_delete
+				is_delete: item.is_delete,
+				log: {
+					user: log.user,
+					action: log.action,
+					content: log.content,
+					created_at: log.created_at
+				}
 			}
 
 			@res[:data][:item] = {
@@ -38,11 +51,26 @@ class Api::V1::TodoListItemController < AuthController
 		item.finished = params[:finished]
 		item.is_delete = params[:is_delete]
 		if item.save!
+			if params[:is_delete]
+				log = ActionLog.create(user: @user, todo_list: @list, action: 'delete', content: item.content, logable: item)
+			else	
+				if params[:finished]
+					log = ActionLog.create(user: @user, todo_list: @list, action: 'fin', logable: item)
+				else
+					log = ActionLog.create(user: @user, todo_list: @list, action: 'res', logable: item)
+				end
+			end			
 			ActionCable.server.broadcast "list_#{@short_cut}",action: 'update_list_item', data: {
 				id: item.id,
 				content: item.content,
 				finished: item.finished,
 				is_delete: item.is_delete,
+				log: {
+					user: log.user,
+					action: log.action,
+					content: log.content,
+					created_at: log.created_at
+				}
 			}
 			
 			@res[:data][:item] = {

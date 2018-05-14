@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180513134525) do
+ActiveRecord::Schema.define(version: 20180514061607) do
+
+  create_table "action_logs", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "action"
+    t.string   "content"
+    t.integer  "todo_list_id"
+    t.integer  "logable_id"
+    t.string   "logable_type"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["todo_list_id"], name: "index_action_logs_on_todo_list_id"
+    t.index ["user_id"], name: "index_action_logs_on_user_id"
+  end
 
   create_table "participants", force: :cascade do |t|
     t.integer  "user_id"
