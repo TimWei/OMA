@@ -1,9 +1,12 @@
 name: 'Oma'
 version: '051001'
 network:
-  host: '//localhost'
-  port: '4000'
+  # backend api setting, replace RAILS_BACKEND_HOST and RAILS_BACKEND_PORT to your real backend server
+  host: 'RAILS_BACKEND_HOST'
+  port: 'RAILS_BACKEND_PORT'
+  # default api path
   api_prefix: '/api/v1'
   cable: '/cable'  
 oauth:
-  google: '1056914337357-noqaejishtr7d1ajgmot2rrabgns2u5m.apps.googleusercontent.com'
+  #replace GOOGLE_OAUTH_ID to your google oauth id
+  google: 'GOOGLE_OAUTH_ID'
