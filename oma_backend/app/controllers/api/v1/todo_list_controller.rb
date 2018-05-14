@@ -38,7 +38,7 @@ class Api::V1::TodoListController < AuthController
 		list = TodoList.where(short_cut: params[:short_cut] ).first 
 		begin
 			Participant.where(user: @user, list: list).first_or_create
-			ActionLog.create(user: @user, todo_list: list, action: 'invite', content: list.name, logable: list)
+			ActionLog.create(user: @user, todo_list: list, action: 'has invited', content: list.name, logable: list)
 			@res[:data][:name] = list.name
 			@res[:data][:short_cut] = list.short_cut
 		rescue => e
