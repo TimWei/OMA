@@ -66,6 +66,7 @@ OmaApi.prototype.get_list_items = function(short_cut, callback){
   this.get('get_list_items', {short_cut: short_cut},function(res){
     console.log(res)
     that.clear_items();
+    that.clear_activities();
     that.set_list_title(res.data.list.name);
     that.set_share_link(res.data.list.short_cut);
     that.append_list_items(res.data.list.items);
@@ -181,6 +182,12 @@ OmaApi.prototype.clear_items = function(){
     if(!e.classList.contains('new_item') && !e.classList.contains('new_item_form') ){e.remove()}
   })
 }
+OmaApi.prototype.clear_activities = function(){
+  lists = document.getElementsByClassName('history')[0];
+  Array.from(lists.children).forEach(function(e){
+    e.remove();
+  })
+}
 
 OmaApi.prototype.set_list_title = function(list_name){
   document.getElementById('list_name').textContent = list_name;
@@ -205,11 +212,18 @@ OmaApi.prototype.append_list_items = function(data){
 }
 
 OmaApi.prototype.append_list_activities = function(data){
-  history = document.getElementsByClassName('history')[0];
+  activities = document.getElementsByClassName('history')[0];
   that = this;
-  data.forEach(function(row){
-    that.append_list_activity(row)
-  });
+  if(data.length == 0){
+    ele = document.createElement('li');
+    ele.textContent = 'no activities';
+    ele.className = 'no_act';
+    activities.prepend(ele);
+  }else{
+    data.forEach(function(row){
+      that.append_list_activity(row)
+    });
+  }
 }
 
 OmaApi.prototype.append_list = function(data){
@@ -240,6 +254,9 @@ OmaApi.prototype.append_list_item = function(data){
 
 OmaApi.prototype.append_list_activity = function(data){
   ul = document.getElementsByClassName('history')[0];
+  if(ul.getElementsByClassName('no_act')[0]){
+    ul.getElementsByClassName('no_act')[0].remove();
+  }
   ele = document.createElement('li');
   user_s = document.createElement('span');
   user_s.textContent = data.user
@@ -321,6 +338,11 @@ OmaApi.prototype.update_list_item = function(data){
   })
 }
 
+OmaApi.prototype.create_list_item = function(data){
+  console.log(data);
+  this.append_list_item(data)
+  this.append_list_activity(data.log)
+}
 //////User Auth/Validations
 OmaApi.prototype.set_user = function (user) {
   this.user = user

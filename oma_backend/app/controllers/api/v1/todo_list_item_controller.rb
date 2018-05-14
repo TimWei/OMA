@@ -20,7 +20,7 @@ class Api::V1::TodoListItemController < AuthController
 		item.finished = false
 		if item.save!
 			log = ActionLog.create(user: @user, todo_list: @list, action: 'create', content: item.content, logable: item)
-			ActionCable.server.broadcast "list_#{@short_cut}",action: 'append_list_item', data: {
+			ActionCable.server.broadcast "list_#{@short_cut}",action: 'create_list_item', data: {
 				id: item.id,
 				content: item.content,
 				finished: item.finished,
