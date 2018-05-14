@@ -6,7 +6,7 @@ class Api::V1::TodoListItemController < AuthController
 			short_cut: @list.short_cut,
 			items: @list.items.active.map{|t| {id: t.id, content: t.content, finished: t.finished, is_delete: t.is_delete} },
 			history: @list.action_logs.sort_by{|t| t.created_at }.map{|t| {
-					user: t.user,
+					user: t.user.name,
 					action: t.action,
 					content: t.content,
 					created_at: t.created_at.strftime("%Y-%m-%d %H:%M:%S")
@@ -26,7 +26,7 @@ class Api::V1::TodoListItemController < AuthController
 				finished: item.finished,
 				is_delete: item.is_delete,
 				log: {
-					user: log.user,
+					user: log.user.name,
 					action: log.action,
 					content: log.content,
 					created_at: log.created_at.strftime("%Y-%m-%d %H:%M:%S")
@@ -66,7 +66,7 @@ class Api::V1::TodoListItemController < AuthController
 				finished: item.finished,
 				is_delete: item.is_delete,
 				log: {
-					user: log.user,
+					user: log.user.name,
 					action: log.action,
 					content: log.content,
 					created_at: log.created_at.strftime("%Y-%m-%d %H:%M:%S")
