@@ -2,8 +2,12 @@
 #### Online TODO-list application.
 `OMA` is an online TODO-list powered by Rails. It has been designed for multi-user editing same list and flexiable for build your own OMA appliction.
 
-## Usage
-TODO
+## Features
+* Social login
+![social login](https://raw.githubusercontent.com/TimWei/OMA/master/doc/images/social_login.png)
+* Invite link & Activity history
+![list page](https://raw.githubusercontent.com/TimWei/OMA/master/doc/images/list_page.png)
+* RESTful API
 
 ## Get Started
 
@@ -79,3 +83,6 @@ I recommended Nginx + Passenger for Rails productions. [Introduction to configur
 ## Create your own OMA appliction?
 You could integrating favorite social network sign-in in user authentication module. or replace front-end bundler from Jekyll to Webpack depend on your needed. changing every module in project is possible:
 ![architecture](https://raw.githubusercontent.com/TimWei/OMA/master/doc/images/architecture.png)
+
+## License
+OMA is licensed under the MIT license
