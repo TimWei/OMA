@@ -1,6 +1,6 @@
 # OMA 
 #### Online TODO-list application.
-`OMA` is an online TODO-list powered by Rails. It has been designed for multi-user editing same list and flexiable for build your own OMA appliction.
+`OMA` is an online TODO-list powered by Rails. It has been designed for multi-user editing same TODO list 
 
 ## Features
 * Social login
